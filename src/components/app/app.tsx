@@ -1,10 +1,5 @@
 import '../../index.css';
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider
-} from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Layout } from './layout';
 import {
   ConstructorPage,
@@ -21,10 +16,13 @@ import { Modal } from '../modal';
 import { OrderInfo } from '../order-info';
 import { IngredientDetails } from '../ingredient-details';
 
-const App = () => (
-  <RouterProvider
-    router={createBrowserRouter(
-      createRoutesFromElements(
+const App = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const backgroundLocation = location.state?.background;
+  return (
+    <>
+      <Routes location={backgroundLocation || location}>
         <Route element={<Layout />}>
           <Route path='/' element={<ConstructorPage />} />
           <Route path='/feed' element={<Feed />} />
@@ -35,10 +33,14 @@ const App = () => (
           <Route path='/profile' element={<Profile />} />
           <Route path='/profile/orders' element={<ProfileOrders />} />
           <Route path='*' element={<NotFound404 />} />
+        </Route>
+      </Routes>
+      {backgroundLocation && (
+        <Routes>
           <Route
             path='/feed/:number'
             element={
-              <Modal title='OrderInfo' onClose={() => {}}>
+              <Modal title='OrderInfo' onClose={() => navigate(-1)}>
                 <OrderInfo />
               </Modal>
             }
@@ -46,7 +48,7 @@ const App = () => (
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='IngredientDetails' onClose={() => {}}>
+              <Modal title='IngredientDetails' onClose={() => navigate(-1)}>
                 <IngredientDetails />
               </Modal>
             }
@@ -54,15 +56,15 @@ const App = () => (
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title='OrderInfo' onClose={() => {}}>
+              <Modal title='OrderInfo' onClose={() => navigate(-1)}>
                 <OrderInfo />
               </Modal>
             }
           />
-        </Route>
-      )
-    )}
-  />
-);
+        </Routes>
+      )}
+    </>
+  );
+};
 
 export default App;
