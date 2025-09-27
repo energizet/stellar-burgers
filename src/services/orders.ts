@@ -1,15 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getFeedsApi } from '@api';
+import { getFeedsApi, getOrderByNumberApi } from '@api';
 import { TOrder } from '@utils-types';
 
 export const getFeeds = createAsyncThunk('getFeedsApi', async () =>
   getFeedsApi()
 );
+//export const getOrderByNumber = createAsyncThunk(
+//  'getOrderByNumberApi',
+//  async (number: number) => getOrderByNumberApi(number)
+//);
 
 const initialState: {
-  orders: TOrder[];
+  orders: Record<string, TOrder>;
 } = {
-  orders: []
+  orders: {}
 };
 
 const ordersSlice = createSlice({
@@ -17,14 +21,17 @@ const ordersSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    orders: (state) => state.orders
+    order: (state, number: string) => state.orders[number],
+    orders: (state) => Object.values(state.orders)
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getFeeds.pending, (state) => {})
-      .addCase(getFeeds.rejected, (state) => {})
+      .addCase(getFeeds.pending, () => {})
+      .addCase(getFeeds.rejected, () => {})
       .addCase(getFeeds.fulfilled, (state, action) => {
-        state.orders = action.payload.orders;
+        state.orders = Object.fromEntries(
+          action.payload.orders.map((x) => [x.number.toString(), x])
+        );
       });
   }
 });
