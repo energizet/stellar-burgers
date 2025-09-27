@@ -17,8 +17,11 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
+    // TODO
   };
-  const closeOrderModal = () => {};
+  const closeOrderModal = () => {
+    // TODO
+  };
 
   const price = useMemo(
     () =>
@@ -29,8 +32,6 @@ export const BurgerConstructor: FC = () => {
       ),
     [constructorItems]
   );
-
-  return null;
 
   return (
     <BurgerConstructorUI

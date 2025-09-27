@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from '../../services/store';
+import { useSelector } from '../../services/store';
 
 import styles from './constructor-page.module.css';
 
@@ -10,11 +10,6 @@ import ingredients, { getIngredients } from '../../services/ingredients';
 
 export const ConstructorPage: FC = () => {
   const isIngredientsLoading = useSelector(ingredients.isIngredientsLoading);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, []);
 
   return (
     <>

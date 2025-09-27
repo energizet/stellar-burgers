@@ -7,11 +7,13 @@ export const getIngredients = createAsyncThunk('getIngredientsApi', async () =>
 );
 
 const initialState: {
+  ingredients: Record<string, TIngredient>;
   buns: TIngredient[];
   mains: TIngredient[];
   sauces: TIngredient[];
   isIngredientsLoading: boolean;
 } = {
+  ingredients: {},
   buns: [],
   mains: [],
   sauces: [],
@@ -23,6 +25,8 @@ const ingredientsSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
+    ingredients: (state) => state.ingredients,
+    ingredient: (state, id: string) => state.ingredients[id],
     buns: (state) => state.buns,
     mains: (state) => state.mains,
     sauces: (state) => state.sauces,
@@ -37,6 +41,9 @@ const ingredientsSlice = createSlice({
         state.isIngredientsLoading = false;
       })
       .addCase(getIngredients.fulfilled, (state, action) => {
+        state.ingredients = Object.fromEntries(
+          action.payload.map((x) => [x._id, x])
+        );
         state.buns = action.payload.filter((x) => x.type === 'bun');
         state.mains = action.payload.filter((x) => x.type === 'main');
         state.sauces = action.payload.filter((x) => x.type === 'sauce');
