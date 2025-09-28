@@ -18,7 +18,6 @@ export const orderBurger = createAsyncThunk(
   (data: string[], { dispatch }) =>
     orderBurgerApi(data).finally(() => {
       dispatch(getFeeds());
-      dispatch(getOrders());
     })
 );
 
@@ -31,7 +30,7 @@ const initialState: {
     total: number;
     totalToday: number;
   };
-  isFeedLoading: boolean;
+  isFeedLoading: boolean | null;
   order: {
     bun: TIngredient | null;
     ingredients: TIngredient[];
@@ -45,7 +44,7 @@ const initialState: {
     total: 0,
     totalToday: 0
   },
-  isFeedLoading: false,
+  isFeedLoading: null,
   order: {
     bun: null,
     ingredients: []
@@ -108,7 +107,7 @@ const ordersSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getFeeds.pending, (state) => {
-        state.isFeedLoading = true;
+        state.isFeedLoading = state.isFeedLoading ?? true;
       })
       .addCase(getFeeds.rejected, (state) => {
         state.isFeedLoading = false;

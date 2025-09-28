@@ -18,9 +18,9 @@ import { IngredientDetails } from '../ingredient-details';
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import { getIngredients } from '../../services/ingredients';
-import { getFeeds } from '../../services/orders';
 import { ProtectedRoute } from '../protected-route';
 import { getUser } from '../../services/auth';
+import { getFeeds } from '../../services/orders';
 
 const App = () => {
   const navigate = useNavigate();
@@ -91,7 +91,14 @@ const App = () => {
           <Route path='*' element={<NotFound404 />} />
           <Route path='/feed/:number' element={<OrderInfo />} />
           <Route path='/ingredients/:id' element={<IngredientDetails />} />
-          <Route path='/profile/orders/:number' element={<OrderInfo />} />
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <ProtectedRoute>
+                <OrderInfo />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
       {backgroundLocation && (
