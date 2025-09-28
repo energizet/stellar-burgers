@@ -5,7 +5,8 @@ import {
   logoutApi,
   registerUserApi,
   TLoginData,
-  TRegisterData
+  TRegisterData,
+  updateUserApi
 } from '@api';
 import { TUser } from '@utils-types';
 
@@ -18,6 +19,10 @@ export const loginUser = createAsyncThunk('loginUserApi', (data: TLoginData) =>
 );
 export const getUser = createAsyncThunk('getUserApi', () => getUserApi());
 export const logout = createAsyncThunk('logoutApi', () => logoutApi());
+export const updateUser = createAsyncThunk(
+  'updateUserApi',
+  (user: Partial<TRegisterData>) => updateUserApi(user)
+);
 
 const initialState: {
   isAuthChecked: boolean;
@@ -86,6 +91,12 @@ const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
         state.isAuthChecked = true;
+      });
+    builder
+      .addCase(updateUser.pending, () => {})
+      .addCase(updateUser.rejected, () => {})
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
       });
   }
 });
