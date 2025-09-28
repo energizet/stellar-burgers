@@ -1,15 +1,17 @@
 import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';
 import { FC } from 'react';
-import { useSelector } from '../../services/store';
-import feed from '../../services/orders';
+import { useDispatch, useSelector } from '../../services/store';
+import feed, { getFeeds } from '../../services/orders';
 
 export const Feed: FC = () => {
+  const dispatch = useDispatch();
   const orders = useSelector(feed.orders);
+  const isFeedLoading = useSelector(feed.isFeedLoading);
 
-  if (!orders.length) {
+  if (isFeedLoading) {
     return <Preloader />;
   }
 
-  return <FeedUI orders={orders} handleGetFeeds={() => {}} />;
+  return <FeedUI orders={orders} handleGetFeeds={() => dispatch(getFeeds())} />;
 };

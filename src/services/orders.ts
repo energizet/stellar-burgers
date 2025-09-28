@@ -5,15 +5,25 @@ import { TOrder } from '@utils-types';
 export const getFeeds = createAsyncThunk('getFeedsApi', async () =>
   getFeedsApi()
 );
-//export const getOrderByNumber = createAsyncThunk(
-//  'getOrderByNumberApi',
-//  async (number: number) => getOrderByNumberApi(number)
-//);
+export const getOrderByNumber = createAsyncThunk(
+  'getOrderByNumberApi',
+  async (number: number) => getOrderByNumberApi(number)
+);
 
 const initialState: {
   orders: Record<string, TOrder>;
+  feed: {
+    total: number;
+    totalToday: number;
+  };
+  isFeedLoading: boolean;
 } = {
-  orders: {}
+  orders: {},
+  feed: {
+    total: 0,
+    totalToday: 0
+  },
+  isFeedLoading: false
 };
 
 const ordersSlice = createSlice({
@@ -22,16 +32,27 @@ const ordersSlice = createSlice({
   reducers: {},
   selectors: {
     order: (state, number: string) => state.orders[number],
-    orders: (state) => Object.values(state.orders)
+    orders: (state) => Object.values(state.orders),
+    feed: (state) => state.feed,
+    isFeedLoading: (state) => state.isFeedLoading
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getFeeds.pending, () => {})
-      .addCase(getFeeds.rejected, () => {})
+      .addCase(getFeeds.pending, (state) => {
+        state.isFeedLoading = true;
+      })
+      .addCase(getFeeds.rejected, (state) => {
+        state.isFeedLoading = false;
+      })
       .addCase(getFeeds.fulfilled, (state, action) => {
         state.orders = Object.fromEntries(
           action.payload.orders.map((x) => [x.number.toString(), x])
         );
+        state.feed = {
+          total: action.payload.total,
+          totalToday: action.payload.totalToday
+        };
+        state.isFeedLoading = false;
       });
   }
 });
