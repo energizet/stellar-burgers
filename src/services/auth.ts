@@ -1,7 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getUserApi, loginUserApi, TLoginData } from '@api';
+import {
+  getUserApi,
+  loginUserApi,
+  registerUserApi,
+  TLoginData,
+  TRegisterData
+} from '@api';
 import { TUser } from '@utils-types';
 
+export const registerUser = createAsyncThunk(
+  'registerUserApi',
+  (data: TRegisterData) => registerUserApi(data)
+);
 export const loginUser = createAsyncThunk('loginUserApi', (data: TLoginData) =>
   loginUserApi(data)
 );
@@ -28,7 +38,21 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, () => {})
+      .addCase(registerUser.pending, (state) => {
+        state.isAuthChecked = false;
+      })
+      .addCase(registerUser.rejected, (state) => {
+        state.isAuthChecked = true;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isAuthenticated = true;
+        state.isAuthChecked = true;
+      });
+    builder
+      .addCase(loginUser.pending, (state) => {
+        state.isAuthChecked = false;
+      })
       .addCase(loginUser.rejected, (state) => {
         state.isAuthChecked = true;
       })
@@ -38,7 +62,9 @@ const authSlice = createSlice({
         state.isAuthChecked = true;
       });
     builder
-      .addCase(getUser.pending, () => {})
+      .addCase(getUser.pending, (state) => {
+        state.isAuthChecked = false;
+      })
       .addCase(getUser.rejected, (state) => {
         state.isAuthChecked = true;
       })
