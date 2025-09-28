@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
 
-export const getIngredients = createAsyncThunk('getIngredientsApi', async () =>
+export const getIngredients = createAsyncThunk('getIngredientsApi', () =>
   getIngredientsApi()
 );
 

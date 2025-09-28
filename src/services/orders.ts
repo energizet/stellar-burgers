@@ -2,12 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getFeedsApi, getOrderByNumberApi } from '@api';
 import { TOrder } from '@utils-types';
 
-export const getFeeds = createAsyncThunk('getFeedsApi', async () =>
-  getFeedsApi()
-);
+export const getFeeds = createAsyncThunk('getFeedsApi', () => getFeedsApi());
 export const getOrderByNumber = createAsyncThunk(
   'getOrderByNumberApi',
-  async (number: number) => getOrderByNumberApi(number)
+  (number: number) => getOrderByNumberApi(number)
 );
 
 const initialState: {
