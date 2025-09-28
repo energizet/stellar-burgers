@@ -69,6 +69,30 @@ const ordersSlice = createSlice({
     },
     clearOrderModalData: (state) => {
       state.orderModalData = null;
+    },
+    switchIngredientOrder: (
+      state,
+      {
+        payload: { index, indexSwitch }
+      }: { payload: { index: number; indexSwitch: number } }
+    ) => {
+      state.order = {
+        ...state.order
+      };
+
+      const tmp = state.order.ingredients[index];
+      state.order.ingredients[index] = state.order.ingredients[indexSwitch];
+      state.order.ingredients[indexSwitch] = tmp;
+    },
+    deleteIngredient: (
+      state,
+      { payload: { index } }: { payload: { index: number } }
+    ) => {
+      state.order = {
+        ...state.order
+      };
+
+      state.order.ingredients.splice(index, 1);
     }
   },
   selectors: {
@@ -124,7 +148,12 @@ const ordersSlice = createSlice({
   }
 });
 
-export const { addIngredient, clearOrderModalData } = ordersSlice.actions;
+export const {
+  addIngredient,
+  clearOrderModalData,
+  switchIngredientOrder,
+  deleteIngredient
+} = ordersSlice.actions;
 
 export default {
   reducer: ordersSlice.reducer,
