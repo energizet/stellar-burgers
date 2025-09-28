@@ -1,14 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getFeedsApi, getOrderByNumberApi } from '@api';
+import { getFeedsApi, getOrderByNumberApi, getOrdersApi } from '@api';
 import { TOrder } from '@utils-types';
 
 export const getFeeds = createAsyncThunk('getFeedsApi', () => getFeedsApi());
+export const getOrders = createAsyncThunk('getOrdersApi', () => getOrdersApi());
 export const getOrderByNumber = createAsyncThunk(
   'getOrderByNumberApi',
   (number: number) => getOrderByNumberApi(number)
 );
 
 const initialState: {
+  myOrders: TOrder[];
   orders: Record<string, TOrder>;
   feed: {
     total: number;
@@ -16,6 +18,7 @@ const initialState: {
   };
   isFeedLoading: boolean;
 } = {
+  myOrders: [],
   orders: {},
   feed: {
     total: 0,
@@ -32,7 +35,8 @@ const ordersSlice = createSlice({
     order: (state, number: string) => state.orders[number],
     orders: (state) => Object.values(state.orders),
     feed: (state) => state.feed,
-    isFeedLoading: (state) => state.isFeedLoading
+    isFeedLoading: (state) => state.isFeedLoading,
+    myOrders: (state) => Object.values(state.myOrders)
   },
   extraReducers: (builder) => {
     builder
@@ -51,6 +55,12 @@ const ordersSlice = createSlice({
           totalToday: action.payload.totalToday
         };
         state.isFeedLoading = false;
+      });
+    builder
+      .addCase(getOrders.pending, () => {})
+      .addCase(getOrders.rejected, () => {})
+      .addCase(getOrders.fulfilled, (state, action) => {
+        state.myOrders = action.payload;
       });
   }
 });
