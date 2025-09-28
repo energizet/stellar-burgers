@@ -4,6 +4,7 @@ import { BurgerConstructorElementProps } from './type';
 
 export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
   ({ ingredient, index, totalItems }) => {
+    // TODO
     const handleMoveDown = () => {};
 
     const handleMoveUp = () => {};
