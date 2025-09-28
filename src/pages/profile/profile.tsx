@@ -1,9 +1,10 @@
 import { ProfileUI } from '@ui-pages';
-import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { useSelector } from '../../services/store';
+import auth from '../../services/auth';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  const user = {
+  const user = useSelector(auth.user) ?? {
     name: '',
     email: ''
   };
@@ -56,6 +57,4 @@ export const Profile: FC = () => {
       handleInputChange={handleInputChange}
     />
   );
-
-  return null;
 };

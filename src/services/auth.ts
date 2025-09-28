@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   getUserApi,
   loginUserApi,
+  logoutApi,
   registerUserApi,
   TLoginData,
   TRegisterData
@@ -16,6 +17,7 @@ export const loginUser = createAsyncThunk('loginUserApi', (data: TLoginData) =>
   loginUserApi(data)
 );
 export const getUser = createAsyncThunk('getUserApi', () => getUserApi());
+export const logout = createAsyncThunk('logoutApi', () => logoutApi());
 
 const initialState: {
   isAuthChecked: boolean;
@@ -71,6 +73,18 @@ const authSlice = createSlice({
       .addCase(getUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.isAuthenticated = true;
+        state.isAuthChecked = true;
+      });
+    builder
+      .addCase(logout.pending, (state) => {
+        state.isAuthChecked = false;
+      })
+      .addCase(logout.rejected, (state) => {
+        state.isAuthChecked = true;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
+        state.isAuthenticated = false;
         state.isAuthChecked = true;
       });
   }
