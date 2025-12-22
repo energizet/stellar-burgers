@@ -2,7 +2,7 @@ import userIngredientsSlice, { getIngredients } from '@slices/ingredients';
 
 const ingredientsReducer = userIngredientsSlice.reducer;
 
-describe('Слайс ингредиентов (Асинхронные экшены)', () => {
+describe('Слайс ингредиентов', () => {
   const initialState = {
     ingredients: {},
     buns: [],

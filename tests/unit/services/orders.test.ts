@@ -6,7 +6,7 @@ import userOrdersSlice, {
 
 const ordersReducer = userOrdersSlice.reducer;
 
-describe('Слайс заказов (Логика конструктора)', () => {
+describe('Слайс заказов', () => {
   const bun = {
     _id: 'bun-1',
     name: 'Булка 1',
